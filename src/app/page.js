@@ -3,8 +3,8 @@ import Accordion from '@/components/Accordion';
 import './globals.css';
 import styles from './page.module.css';
 
-// Revalidate every 1 hour
-export const revalidate = 3600;
+// Data is fetched at build time (static export)
+// For fresh data, rebuild and redeploy via GitHub Actions
 
 export default async function Home() {
   const dataTree = await scrapeKMOU();

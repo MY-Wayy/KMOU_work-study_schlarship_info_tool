@@ -7,17 +7,44 @@ export async function scrapeKMOU() {
   // Cutoff is April 1st of the previous year
   const cutoffDateStr = `${currentYear - 1}.04.01`;
 
-  // Custom fetch with https agent to avoid SSL issues if any
-  const fetchPage = (page) => {
-    return new Promise((resolve, reject) => {
-      // Added search parameter for speed
+  // Fetch with timeout and automatic retry on failure
+  const fetchPage = (page, retries = 3, timeoutMs = 10000) => {
+    const attempt = () => new Promise((resolve, reject) => {
       const url = `https://www.kmou.ac.kr/kmou/na/ntt/selectNttList.do?mi=2032&bbsId=10373&currPage=${page}&searchCnd=1&searchWrd=${encodeURIComponent('국가근로')}`;
-      https.get(url, (res) => {
+      const req = https.get(url, (res) => {
         let data = '';
         res.on('data', chunk => data += chunk);
         res.on('end', () => resolve({ page, html: data }));
-      }).on('error', err => reject(err));
+        res.on('error', reject);
+      });
+
+      // Abort and reject on timeout
+      const timer = setTimeout(() => {
+        req.destroy();
+        reject(new Error(`Timeout fetching page ${page}`));
+      }, timeoutMs);
+
+      req.on('close', () => clearTimeout(timer));
+      req.on('error', (err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
     });
+
+    // Exponential backoff retry
+    const retry = async (attemptsLeft) => {
+      try {
+        return await attempt();
+      } catch (err) {
+        if (attemptsLeft <= 1) throw err;
+        const delay = (retries - attemptsLeft + 1) * 1500; // 1.5s, 3s ...
+        console.warn(`Retrying page ${page} in ${delay}ms... (${attemptsLeft - 1} retries left)`);
+        await new Promise(r => setTimeout(r, delay));
+        return retry(attemptsLeft - 1);
+      }
+    };
+
+    return retry(retries);
   };
 
   let startPage = 1;
@@ -32,7 +59,17 @@ export async function scrapeKMOU() {
         promises.push(fetchPage(startPage + i));
       }
       
-      const results = await Promise.all(promises);
+      // allSettled: a failed page doesn't abort the whole batch
+      const settled = await Promise.allSettled(promises);
+      const results = settled
+        .filter(r => r.status === 'fulfilled')
+        .map(r => r.value);
+      
+      // Log any pages that failed all retries
+      settled
+        .filter(r => r.status === 'rejected')
+        .forEach(r => console.error('Page permanently failed:', r.reason?.message));
+
       
       for (const result of results) {
         if (!shouldContinue) break;
