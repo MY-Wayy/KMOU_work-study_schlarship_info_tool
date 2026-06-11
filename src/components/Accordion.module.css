@@ -1,0 +1,132 @@
+.accordionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--glass-border);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.nodeHeader:hover {
+  background: var(--surface-3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.yearHeader {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  font-size: 1.25rem;
+}
+
+.semesterHeader {
+  background: rgba(30, 41, 59, 0.5);
+  font-size: 1.15rem;
+  margin-top: 0.5rem;
+}
+
+.typeHeader {
+  background: rgba(15, 23, 42, 0.3);
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.chevron {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--primary);
+}
+
+.expanded {
+  transform: rotate(90deg);
+}
+
+.nodeTitle {
+  flex: 1;
+}
+
+.badge {
+  background: var(--primary);
+  color: white;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.nodeContent {
+  display: flex;
+  flex-direction: column;
+  padding-left: 24px;
+  border-left: 2px solid var(--glass-border);
+  margin-left: 22px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contentExpanded {
+  max-height: 2000px; /* arbitrary large value for smooth transition */
+  opacity: 1;
+  margin-bottom: 0.5rem;
+}
+
+.postItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.postItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.postIcon {
+  margin-right: 12px;
+  font-size: 1.2rem;
+}
+
+.postTitle {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  .nodeContent {
+    padding-left: 12px;
+    margin-left: 12px;
+  }
+}
