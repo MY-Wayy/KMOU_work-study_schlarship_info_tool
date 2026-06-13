@@ -161,7 +161,8 @@ export async function scrapeKMOU() {
               year,
               semester,
               type,
-              link
+              link,
+              date: dateStr
             });
           }
         });

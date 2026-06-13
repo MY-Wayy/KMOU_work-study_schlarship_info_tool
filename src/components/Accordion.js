@@ -25,6 +25,7 @@ function PostItem({ post }) {
     <a href={post.link} target="_blank" rel="noopener noreferrer" className={styles.postItem}>
       <span className={styles.postIcon}>📄</span>
       <span className={styles.postTitle}>{post.title}</span>
+      {post.date && <span className={styles.postDate}>{post.date}</span>}
     </a>
   );
 }

@@ -124,6 +124,14 @@
   line-height: 1.4;
 }
 
+.postDate {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-left: 1rem;
+}
+
 @media (max-width: 600px) {
   .nodeContent {
     padding-left: 12px;
