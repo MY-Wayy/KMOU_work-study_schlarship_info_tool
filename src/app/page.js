@@ -23,7 +23,7 @@ export default async function Home() {
     <main className={styles.main}>
       <div className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>한국해양대학교</h1>
+          <h1 className={styles.title}>국립한국해양대학교</h1>
           <h2 className={styles.subtitle}>국가근로장학생 공지사항</h2>
           <p className={styles.description}>아치마당 - 정보광장 - 공지사항 크롤링 결과</p>
         </header>
