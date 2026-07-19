@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
   schedule:
-    # 매일 오전 8시 KST (전날 23:00 UTC) 에 자동 재빌드/재배포
-    - cron: '0 23 * * *'
+    # 매일 오전 4시 KST (전날 19:00 UTC) 에 자동 재빌드/재배포
+    - cron: '0 19 * * *'
   workflow_dispatch: # 수동 실행 허용
 
 jobs:
