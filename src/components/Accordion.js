@@ -92,10 +92,28 @@ function YearNode({ year, semesters }) {
 }
 
 export default function Accordion({ data }) {
+  // Separate '미상 학년도' posts from regular year groups
+  const { '미상 학년도': unknownYear, ...knownYears } = data;
+
+  // Flatten all posts from unknownYear across all semesters and types
+  const unknownPosts = [];
+  if (unknownYear) {
+    Object.values(unknownYear).forEach(types => {
+      Object.values(types).forEach(posts => {
+        posts.forEach(post => unknownPosts.push(post));
+      });
+    });
+  }
+
   return (
     <div className={styles.accordionContainer}>
-      {Object.keys(data).sort((a,b) => b.localeCompare(a)).map((year, i) => (
-        <YearNode key={i} year={year} semesters={data[year]} />
+      {/* '미상 학년도' posts grouped under a single '기타 공지' accordion at the top */}
+      {unknownPosts.length > 0 && (
+        <TypeNode type="기타 공지" posts={unknownPosts} />
+      )}
+      {/* Regular year accordion groups */}
+      {Object.keys(knownYears).sort((a, b) => b.localeCompare(a)).map((year, i) => (
+        <YearNode key={i} year={year} semesters={knownYears[year]} />
       ))}
     </div>
   );
