@@ -7,7 +7,7 @@ import styles from './page.module.css';
 // For fresh data, rebuild and redeploy via GitHub Actions
 
 export default async function Home() {
-  const dataTree = await scrapeKMOU();
+  const { tree: dataTree, pagesChecked } = await scrapeKMOU();
   
   const now = new Date();
   const buildTime = new Intl.DateTimeFormat('ko-KR', {
@@ -39,8 +39,9 @@ export default async function Home() {
         </section>
         
         <footer className={styles.footer}>
-          <div className={styles.updateTime}>
-            마지막 업데이트: {buildTime}
+          <div className={styles.updateTime} style={{ marginBottom: '8px', opacity: 0.8, fontSize: '0.85rem' }}>
+            마지막 업데이트: {buildTime} <br />
+            (크롤링 탐색 범위: 최근 공지사항 {pagesChecked}페이지)
           </div>
           <div className={styles.credit}>
             Built with <strong>Antigravity IDE</strong> by

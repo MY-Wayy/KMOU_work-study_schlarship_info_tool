@@ -4,8 +4,8 @@ import https from 'https';
 export async function scrapeKMOU() {
   const posts = [];
   const currentYear = new Date().getFullYear();
-  // Cutoff is April 1st of the previous year
-  const cutoffDateStr = `${currentYear - 1}.04.01`;
+  // Cutoff is January 1st of the previous year
+  const cutoffDateStr = `${currentYear - 1}.01.01`;
 
   // Fetch with timeout and automatic retry on failure
   const fetchPage = (page, retries = 3, timeoutMs = 10000) => {
@@ -133,7 +133,7 @@ export async function scrapeKMOU() {
           title = title.replace(/\s+/g, ' ');
   
           if (title.includes('국가근로')) {
-            const yearMatch = title.match(/(20\d{2})(?:학년도|년도)/);
+            const yearMatch = title.match(/(20\d{2})(?:학년도|년도|년)/);
             const semesterMatch = title.match(/([12]학기|여름학기|겨울학기)/);
   
             let type = '기타 공지';
@@ -176,7 +176,7 @@ export async function scrapeKMOU() {
       
       startPage += 5;
       // Safety break to prevent infinite loops
-      if (startPage > 50) break;
+      if (startPage > 200) break;
     } catch (e) {
       console.error(`Error scraping pages starting from ${startPage}:`, e);
       break;
@@ -204,5 +204,8 @@ export async function scrapeKMOU() {
     }
   });
 
-  return tree;
+  return {
+    tree,
+    pagesChecked: startPage - 1
+  };
 }

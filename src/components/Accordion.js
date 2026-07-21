@@ -59,9 +59,15 @@ function SemesterNode({ semester, types }) {
         <span className={styles.nodeTitle}>{semester}</span>
       </button>
       <div className={`${styles.nodeContent} ${expanded ? styles.contentExpanded : ''}`}>
-        {Object.keys(types).map((type, i) => (
-          <TypeNode key={i} type={type} posts={types[type]} />
-        ))}
+        {Object.keys(types)
+          .sort((a, b) => {
+            if (a === '기타 공지') return 1;
+            if (b === '기타 공지') return -1;
+            return 0;
+          })
+          .map((type, i) => (
+            <TypeNode key={i} type={type} posts={types[type]} />
+          ))}
       </div>
     </div>
   );
